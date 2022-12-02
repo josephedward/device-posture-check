@@ -1,0 +1,7 @@
+version: "3"
+
+tasks:
+  main:
+    cmds:
+      - echo "***Starting GODVP***"
+      - go run . {{.CLI_ARGS}}

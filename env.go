@@ -3,6 +3,9 @@ package main
 import (
 	"github.com/joho/godotenv"
 	"os"
+	// requests import
+
+
 )
 
 type TsEnv struct {

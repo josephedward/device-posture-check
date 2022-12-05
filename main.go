@@ -1,23 +1,30 @@
 package main
 
 import (
-// .env import
-// "github.com/joho/godotenv"
-//tailscale import
-// "tailscale.com/client/tailscale"
-"fmt"
-
+	"context"
+	// "log"
+	// "os"
+	"fmt"
+	"github.com/tailscale/tailscale-client-go/tailscale"
+	"godpc/cli"
 )
 
 func main() {
-// load .env file
-tsenv, err := Env()
-fmt.Println(tsenv)
-if err != nil {
-fmt.Println("Error loading .env file")
-}
 
-// tailscale - works
-// curl 'https://api.tailscale.com/api/v2/tailnet/josephedward.github/devices' \
-// -u "tskey-api-kfcWnv4CNTRL-nTmfmpo7zPfnHBuTgLTSTfBs4qZqKx2i"
+	tsenv, err := Env()
+	cli.Success("tsenv: ", tsenv)
+	cli.PrintIfErr(err)
+
+
+	client, err := tailscale.NewClient(tsenv.apiKey, tsenv.tailnet)
+	cli.PrintIfErr(err)
+
+	// List all your devices
+	devices, err := client.Devices(context.Background())
+	cli.Success("devices :",devices)
+	// loop over devices
+	for _, device := range devices {
+		fmt.Println(device)
+	}
+	cli.PrintIfErr(err)
 }

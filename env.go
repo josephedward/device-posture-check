@@ -1,46 +1,21 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
+	// "fmt"
 	"os"
-	// requests import
 
-
+	"github.com/joho/godotenv"
 )
 
 type TsEnv struct {
-	API          string
+	apiKey          string
+	tailnet         string
 }
 
 
-func Env() (login TsEnv, err error){
+func Env() (env TsEnv, err error){
 	err = godotenv.Load("./.env")
-	API := os.Getenv("TSAPI")
-	return TsEnv{API}, err
+	apiKey := os.Getenv("APIKEY")
+	tailnet := os.Getenv("TAILNET")
+	return TsEnv{apiKey, tailnet}, err
 }
-
-// func LoadEnv() (login AwsEnv, err error) {
-// 	//load env variables
-// 	err = godotenv.Load("./.env")
-// 	env := Env()
-// 	return env, err
-// }
-
-// func LoadEnvPath(path string) (login AwsEnv, err error) {
-// 	//load env variables
-// 	err = godotenv.Load(path)
-// 	env := Env()
-// 	return env, err
-// }
-
-// func ArgEnv() (login AwsEnv, err error) {
-// 	//set all needed vendor credentials from cli arg
-// 	url := os.Args[1]
-// 	username := os.Args[2]
-// 	password := os.Args[3]
-// 	key_id := os.Args[4]
-// 	access_key := os.Args[5]
-
-// 	return AwsEnv{url, username, password, key_id, access_key}, err
-// }
-

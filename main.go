@@ -2,11 +2,10 @@ package main
 
 import (
 	"context"
-	// "log"
-	// "os"
 	"fmt"
 	"github.com/tailscale/tailscale-client-go/tailscale"
 	"godpc/cli"
+	"github.com/hokaccha/go-prettyjson"
 )
 
 func main() {
@@ -23,8 +22,11 @@ func main() {
 	devices, err := client.Devices(context.Background())
 	cli.Success("devices :",devices)
 	// loop over devices
-	for _, device := range devices {
-		fmt.Println(device)
-	}
+	// for _, device := range devices {
+	// 	fmt.Println(device)
+	// }
 	cli.PrintIfErr(err)
+	s, _ := prettyjson.Marshal(devices)
+	fmt.Println(string(s))
 }
+  

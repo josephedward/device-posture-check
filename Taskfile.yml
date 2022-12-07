@@ -5,3 +5,7 @@ tasks:
     cmds:
       - echo "***Starting GODVP***"
       - go run . {{.CLI_ARGS}}
+  server:
+    cmds:
+      - echo "***Starting GODVP***"
+      - go run /tailscale/server.go {{.CLI_ARGS}}

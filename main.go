@@ -1,19 +1,13 @@
 package main
 
 import (
-	"encoding/json"
-	// "context"
 	"godpc/cli"
-	// "fmt"
-	"github.com/hokaccha/go-prettyjson"
-	// "github.com/tailscale/tailscale-client-go/tailscale"
-	//tsnet
-	// "github.com/tailscale/tailscale-client-go/tailscale/net"
 	"godpc/osquery"
+	"godpc/tailscale"
 	"os"
 	"github.com/rs/zerolog"
-	// "fmt"
-	// "log"
+	// "reflect"
+	
 )
 
 func main() {
@@ -26,7 +20,13 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 	//welcome message
-	cli.Welcome()
+	// cli.Welcome()
+
+
+	tsenv, err := cli.Env()
+	cli.Success("tsenv: ", tsenv)
+	cli.PrintIfErr(err)
+
 	//read the query
 	cli.Success("Reading query")
 	queryString := osquery.ReadQuery("query.sql")
@@ -34,13 +34,12 @@ func main() {
 	//run the query
 	cli.Success("Running query")
 	queryResponse := osquery.RunQuery("/var/osquery/osquery.em", queryString)
-	cli.Success("Query Response : " + queryResponse)
-	
-	json, err := json.Marshal(queryResponse)
-	cli.PrintIfErr(err)
-	//pretty print the json
-	pretty, err := prettyjson.Format(json)
+	cli.Success("Query Response : ", queryResponse)
+	cli.Success("len(query)", len(queryResponse))
 
-	
-	//expose the results
-}
+	//create the service
+	cli.Success("Creating service")
+	tailscale.CreateService(queryResponse,tsenv.Ip)
+
+
+	}

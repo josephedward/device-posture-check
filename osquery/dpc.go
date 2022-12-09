@@ -41,12 +41,9 @@ func RunQuery(socketPath string, queryString string) string{
 		log.Fatalf("osqueryd returned error: %s", resp.Status.Message)
 	}
 
-	cli.Success("Query Response", resp.Response)
-	// return fmt.Sprintf("%#v", resp.Response)
-
-	//send the response as json 
 	json, err := json.Marshal(resp.Response)
 	cli.PrintIfErr(err)
 	return string(json)
+
 }
 

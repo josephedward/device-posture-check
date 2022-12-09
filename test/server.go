@@ -16,7 +16,7 @@ var (
 )
 
 func main() {
-	flag.Parse()
+	
 
 	s := &tsnet.Server{
 		Hostname: *hostname,
@@ -59,7 +59,3 @@ func firstLabel(s string) string {
 	return s
 }
 
-
-// func GetServer(){}
-
-// func CreateServer(){}

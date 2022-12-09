@@ -4,12 +4,18 @@ tasks:
   main:
     cmds:
       - echo "***Starting GODVP***"
+      # - go clean -modcache
+      - echo TSIP=\"$(tailscale ip -4)\" >> .env
+      - echo $TSIP
       - go run . {{.CLI_ARGS}}
+
   server:
     cmds:
       - echo "***Starting Test/Server***"
+      - go clean -modcache
       - go run /test/server.go {{.CLI_ARGS}}
   osquery:
     cmds:
       - echo "***Starting Test/Osquery***"
+      - go clean -modcache
       - go run /test/osquery.go {{.CLI_ARGS}}

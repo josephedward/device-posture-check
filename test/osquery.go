@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	fmt.Println("len(os.Args) : ", len(os.Args))
+	// fmt.Println("len(os.Args) : ", len(os.Args))
 	if len(os.Args) != 3 {
 		log.Fatalf("Usage: %s SOCKET_PATH QUERY", os.Args[0])
 	}

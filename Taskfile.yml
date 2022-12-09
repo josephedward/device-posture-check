@@ -7,5 +7,9 @@ tasks:
       - go run . {{.CLI_ARGS}}
   server:
     cmds:
-      - echo "***Starting GODVP***"
-      - go run /tailscale/server.go {{.CLI_ARGS}}
+      - echo "***Starting Test/Server***"
+      - go run /test/server.go {{.CLI_ARGS}}
+  osquery:
+    cmds:
+      - echo "***Starting Test/Osquery***"
+      - go run /test/osquery.go {{.CLI_ARGS}}

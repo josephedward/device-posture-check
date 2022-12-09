@@ -53,7 +53,6 @@ func Error(message ...interface{}) {
 }
 
 func Welcome() {
-	fmt.Println(Red + "	                          (                                		" + Reset)
 	fmt.Println(Red + "                :          ED.                             		" + Reset)
 	fmt.Println(Red + "               t#,         E#Wi                          .,		" + Reset)
 	fmt.Println(Red + "        .Gt   ;##W.        E###G.       t               ,Wt		" + Reset)

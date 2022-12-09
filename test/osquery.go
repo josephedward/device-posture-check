@@ -5,7 +5,8 @@ import (
 	"os"
 	"time"
 	"log"
-	"github.com/osquery/osquery-go"
+	"github.com/osquery/osquery-go"	
+
 )
 
 func main() {

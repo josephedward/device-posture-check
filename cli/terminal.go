@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+
 	"github.com/rs/zerolog"
 	// "github.com/rs/zerolog/log"
 )
@@ -23,7 +24,6 @@ func PrintIfErr(err error) {
 }
 
 func Success(message ...interface{}) {
-
 	//if log level is debug, print success messages
 	if zerolog.GlobalLevel() == zerolog.DebugLevel {
 		for _, msg := range message {
@@ -52,24 +52,21 @@ func Error(message ...interface{}) {
 	}
 }
 
-
 func Welcome() {
-	fmt.Println("	                                                    		")
-	fmt.Println("                :      ED.                             		")
-	fmt.Println("               t#,     E#Wi                          .,		")
-	fmt.Println("        .Gt   ;##W.    E###G.       t               ,Wt		")
-	fmt.Println("       j#W:  :#L:WE    E#fD#W;      ED.            i#D.		")
-	fmt.Println("     ;K#f   .KG  ,#D   E#t t##L     E#K:          f#f  		")
-	fmt.Println("   .G#D.    EE    ;#f  E#t  .E#K,   E##W;       .D#i   		")
-	fmt.Println("  j#K;     f#.     t#i E#t    j##f  E#E##t     :KW,    		")
-	fmt.Println(",K#f   ,GD;:#G     GK  E#t    :E#K: E#ti##f    t#f     		")
-	fmt.Println(" j#Wi   E#t ;#L   LW.  E#t   t##L   E#t  ;##D.  ;#G    		")
-	fmt.Println("  .G#D: E#t  t#f f#:   E#t .D#W;    E#E  .##K:   :KE.  		")
-	fmt.Println("    ,K#fK#t   f#D#;    E#tiW#G.     E#L;;;;;;,    .DW: 		")
-	fmt.Println("      j###t    G#t     E#K##i       E#t             L#,		")
-	fmt.Println("       .G#t     t      E##D.        E#t              jt		")
-	fmt.Println("         ;;            E#t          E#t                ) 		")
-	fmt.Println("                       L:                              		")
-	
-	}
-	
+	fmt.Println(Red + "	                          (                                		" + Reset)
+	fmt.Println(Red + "                :          ED.                             		" + Reset)
+	fmt.Println(Red + "               t#,         E#Wi                          .,		" + Reset)
+	fmt.Println(Red + "        .Gt   ;##W.        E###G.       t               ,Wt		" + Reset)
+	fmt.Println(Red + "       j#W:  :#L:WE        E#fD#W;      ED.            i#D.		" + Reset)
+	fmt.Println(Red + "     ;K#f   .KG  ,#D       E#t t##L     E#K:          f#f  		" + Reset)
+	fmt.Println(Red + "   .G#D.    EE    ;#f      E#t  .E#K,   E##W;       .D#i   		" + Reset)
+	fmt.Println(Red + "  j#K;     f#.     t#i ### E#t    j##f  E#E##t     :KW,    		" + Reset)
+	fmt.Println(Red + ",K#f   ,GD;:#G     GK      E#t    :E#K: E#ti##f    t#f     		" + Reset)
+	fmt.Println(Red + " j#Wi   E#t ;#L   LW.      E#t   t##L   E#t  ;##D.  ;#G    		" + Reset)
+	fmt.Println(Red + "  .G#D: E#t  t#f f#:       E#t .D#W;    E#E  .##K:   :KE.  		" + Reset)
+	fmt.Println(Red + "    ,K#fK#t   f#D#;        E#tiW#G.     E#L;;;;;;,    .DW: 		" + Reset)
+	fmt.Println(Red + "      j###t    G#t         E#K##i       E#t             L#,		" + Reset)
+	fmt.Println(Red + "       .G#t     t          E##D.        E#t              jt		" + Reset)
+	fmt.Println(Red + "         ;;                E#t    **    E#t     **        )  **	" + Reset)
+	fmt.Println(Red + "                           L:                              		" + Reset)
+}

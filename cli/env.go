@@ -1,9 +1,7 @@
-package main
+package cli
 
 import (
-	// "fmt"
 	"os"
-
 	"github.com/joho/godotenv"
 )
 

@@ -86,4 +86,5 @@ require (
 	honnef.co/go/js/dom/v2 v2.0.0-20221001195520-26252dedbe70 // indirect
 	inet.af/peercred v0.0.0-20210906144145-0893ea02156a // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
+	rogchap.com/v8go v0.7.0 // indirect
 )

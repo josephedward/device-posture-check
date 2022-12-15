@@ -35,11 +35,11 @@ func main() {
 	cli.Success("Running query")
 	queryResponse := osquery.RunQuery("/var/osquery/osquery.em", queryString)
 	cli.Success("Query Response : ", queryResponse)
-	cli.Success("len(query)", len(queryResponse))
+	// cli.Success("len(query)", len(queryResponse))
 
 	//create the service
 	cli.Success("Creating service")
-	tailscale.CreateService(queryResponse,tsenv.Ip)
+	tailscale.CreateService(queryResponse,tsenv)
 
 
 	}

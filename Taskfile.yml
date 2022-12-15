@@ -5,8 +5,7 @@ tasks:
     cmds:
       - echo "***Starting GODVP***"
       # - go clean -modcache
-      - echo TSIP=\"$(tailscale ip -4)\" >> .env
-      - echo $TSIP
+      - ./scripts/init.sh
       - go run . {{.CLI_ARGS}}
 
   server:

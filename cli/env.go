@@ -9,6 +9,7 @@ type TsEnv struct {
 	ApiKey          string
 	Tailnet         string
 	Ip			    string
+	DevId			string
 }
 
 
@@ -17,8 +18,10 @@ func Env() (env TsEnv, err error){
 	apiKey := os.Getenv("APIKEY")
 	tailnet := os.Getenv("TAILNET")
 	tsip := os.Getenv("TSIP")
+	devid := os.Getenv("DEVID")
 	os.Setenv("TS_AUTHKEY", apiKey)
 	os.Setenv("TS_NET", tailnet)
 	os.Setenv("TS_IP", tsip)
-	return TsEnv{apiKey, tailnet, tsip}, err
+	os.Setenv("TS_DEVID", devid)
+	return TsEnv{apiKey, tailnet, tsip, devid}, err
 }

@@ -9,6 +9,7 @@ import (
 	// "reflect"
 	// "log"
 	
+	
 )
 
 var log = cli.ZeroLog()
@@ -17,9 +18,7 @@ var log = cli.ZeroLog()
 func main() {
 
 	bootstrap()
-
 	query()
-
 
 	// //create the service
 	// cli.Success("Creating service")
@@ -42,5 +41,6 @@ func query(){
 	//run the query
 	cli.Success("run query")
 	queryResponse := osquery.RunQuery("/var/osquery/osquery.em", queryString)
-	cli.Success("query result : ", queryResponse)
+	cli.Success("query result : ", queryResponse)	
 }
+

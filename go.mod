@@ -56,6 +56,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/robertkrimen/otto v0.2.1 // indirect
+	github.com/simonnilsson/ask v0.3.0 // indirect
 	github.com/siongui/godom v0.0.0-20200920152407-31a6de96fdf6 // indirect
 	github.com/tailscale/certstore v0.1.1-0.20220316223106-78d6e1c49d8d // indirect
 	github.com/tailscale/golang-x-crypto v0.0.0-20221102133106-bc99ab8c2d17 // indirect

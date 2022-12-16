@@ -1,9 +1,11 @@
 #!/bin/bash
-TSIP=$(tailscale ip -4) 
-echo TSIP : $TSIP
-echo TSIP=\"$TSIP\" >> .env
 
-DEVID=$(tailscale status --json | jq -r '.Self.UserID')
-echo DEVID : $DEVID
-echo DEVID=\"$DEVID\" >> .env
+echo TSIP=\"$(tailscale ip -4)\" >> .env
+echo $TSIP
+echo "y" | sudo apt install jq
+echo "y" | sudo apt install gcc
+echo "y" | sudo apt install g++
+echo DEVID=\"$(tailscale status --json | jq -r '.Self.UserID'  )\" >> .env
+echo $DEVID
+
 

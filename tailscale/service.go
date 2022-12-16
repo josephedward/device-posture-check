@@ -1,14 +1,21 @@
 package tailscale
 
 import (
+	b64 "encoding/base64"
 	"flag"
 	"fmt"
 	"godpc/cli"
-	"html"
 	"log"
+
+	"tailscale.com/tsnet"
+
+
+	"html"
 	"net/http"
 	"strings"
-	"tailscale.com/tsnet"
+	// "github.com/robertkrimen/otto"
+	// v8 "rogchap.com/v8go"
+	"os"
 )
 
 var (
@@ -34,6 +41,16 @@ func CreateService(statusQuery string, env cli.TsEnv) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(lc)
+
+	cli.Success("tsenv.devId: ", env.ApiKey)
+	sEnc := b64.StdEncoding.EncodeToString([]byte(env.DevId))
+	cli.Success("base64 encoded : ", sEnc)
+	authFunc := ReadJs("./scripts/authorize.js")
+
+	test, err := fmt.Printf(authFunc, sEnc, env.DevId)
+	fmt.Println(test)
+	
 
 	http.Serve(ln, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		who, err := lc.WhoIs(r.Context(), r.RemoteAddr)
@@ -41,12 +58,23 @@ func CreateService(statusQuery string, env cli.TsEnv) {
 			http.Error(w, err.Error(), 500)
 			return
 		}
-
-		// //print username
+		//print username
 		fmt.Fprintf(w, "<p>Username: %s</p>", html.EscapeString(who.UserProfile.LoginName))
 		fmt.Fprintf(w, "<p>Report for TS NODE @ IP ADDRESS : %s</p>", html.EscapeString(env.Ip))
-		fmt.Fprintf(w, "<p>Query Results: %s</p>", strings.ReplaceAll(statusQuery, ",", ",<br/>"))
-
+		fmt.Fprintf(w, "<p>Query Results: %s</p>", strings.ReplaceAll(statusQuery, ",", ",<br>"))
+		fmt.Fprintf(w, "<p>Query Results: %s</p>", strings.ReplaceAll(statusQuery, ",", ",<br>"))
 	}))
 
 }
+
+func ReadJs(path string) string {
+	//use the os package to read the file
+	c, ioErr := os.ReadFile(path)
+	js := string(c)
+	cli.PrintIfErr(ioErr)
+	return js
+}
+
+
+
+

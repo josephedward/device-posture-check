@@ -16,10 +16,8 @@ var log = cli.ZeroLog()
 
 
 func main() {
-
 	bootstrap()
 	query()
-
 	// //create the service
 	// cli.Success("Creating service")
 	// tailscale.CreateService(queryResponse, tsenv)
@@ -44,3 +42,9 @@ func query(){
 	cli.Success("query result : ", queryResponse)	
 }
 
+
+func service(){
+	//create the service
+	cli.Success("Creating service")
+	// tailscale.CreateService(queryResponse, tsenv)
+}

@@ -3,8 +3,8 @@ version: "3"
 tasks:
   main:
     cmds:
-      - echo "***Starting GODVP***"
-      # - go clean -modcache
+      - echo "...Bootstrapping Go-DVP..."
+      - go clean -modcache | echo "Cleaned Go Cache"
       - ./scripts/init.sh
       - go run . {{.CLI_ARGS}}
 

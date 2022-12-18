@@ -1,20 +1,29 @@
 version: "3"
 
 tasks:
+  default:
+    cmds:
+      - touch .tsip
+      - tailscale ip -4 > .tsip
+      - cat .tsip
+      - tailscale status --json | jq -r '.Self.UserID' > .devid
+      - cat .devid
+      - task osquery
+      - cd current && sudo caddy file-server --domain=$(cat ../.tsip) --browse
   main:
     cmds:
       - echo "...Bootstrapping Go-DVP..."
-      - go clean -modcache | echo "Cleaned Go Cache"
       - ./scripts/init.sh
       - go run . {{.CLI_ARGS}}
-
   server:
     cmds:
       - echo "***Starting Test/Server***"
-      - go clean -modcache
-      - go run /test/server.go {{.CLI_ARGS}}
+      - go run ./test/server.go {{.CLI_ARGS}}
   osquery:
     cmds:
       - echo "***Starting Test/Osquery***"
-      - go clean -modcache
-      - go run /test/osquery.go {{.CLI_ARGS}}
+      - go run ./test/osquery.go {{.CLI_ARGS}}
+  cache:
+    cmds:
+      - echo "...Cleaning Cache..."
+      - go clean -modcache | echo "Cleaned Go Cache"

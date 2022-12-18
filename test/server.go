@@ -7,16 +7,14 @@ import (
 	"log"
 	"net/http"
 	"strings"
-
 	"tailscale.com/tsnet"
 )
 
 var (
-	hostname = flag.String("hostname", "hello", "hostname for the tailnet")
+	hostname = flag.String("hostname", "PostureService", "hostname for the tailnet")
 )
 
 func main() {
-	
 
 	s := &tsnet.Server{
 		Hostname: *hostname,

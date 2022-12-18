@@ -1,0 +1,1 @@
+SELECT * FROM processes WHERE (name = 'clamd') OR (name = 'freshclam');

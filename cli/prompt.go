@@ -3,18 +3,51 @@ package cli
 import (
 	"errors"
 	"fmt"
-	"github.com/manifoldco/promptui"
 	"os"
+	"strings"
+
+	"github.com/manifoldco/promptui"
 )
 
 type PromptContent struct {
-	Label string
+	Label    string
 	errorMsg string
 }
 
 type PromptOptions struct {
 	Label string
 	Key   int64
+}
+
+func GetTemplates() *promptui.SelectTemplates {
+	templates := &promptui.SelectTemplates{
+		Label:    "{{ . }}",
+		Active:   "\U0001F336 {{ .Label | yellow }} ",
+		Inactive: "  {{ .Label | cyan }} ",
+		Selected: "\U0001FAD1 {{ .Label | green | cyan }}",
+	}
+	return templates
+}
+
+func GetSearcher(options []PromptOptions) func(input string, index int) bool {
+	searcher := func(input string, index int) bool {
+		option := options[index]
+		name := strings.Replace(strings.ToLower(option.Label), " ", "", -1)
+		input = strings.Replace(strings.ToLower(input), " ", "", -1)
+		return strings.Contains(name, input)
+	}
+	return searcher
+}
+
+func Select(promptTitle string, options []PromptOptions) *promptui.Select {
+	prompt := promptui.Select{
+		Label:     promptTitle,
+		Items:     options,
+		Templates: GetTemplates(),
+		Size:      4,
+		Searcher:  GetSearcher(options),
+	}
+	return &prompt
 }
 
 func PromptGetInput(pc PromptContent) string {
@@ -97,4 +130,19 @@ func PromptRepoName() (repo string, err error) {
 		PromptRepoName()
 	}
 	return repo, err
+}
+
+func PromptQuery() string {
+	prompt := promptui.Prompt{
+		Label: "Enter the query to run",
+		// Templates: templates,
+		// Validate: validate,
+	}
+	result, err := prompt.Run()
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Printf("Query Entered : %q\n", result)
+	return result
 }

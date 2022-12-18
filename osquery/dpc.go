@@ -12,6 +12,14 @@ import (
 	"github.com/osquery/osquery-go"
 )
 
+type QueryStruct struct {
+	CurrentQuery            string
+	CurrentQueryResponseMap map[string]interface{}
+	CurrentQueryResponseStr string
+}
+
+var CurrentQueryStruct = &QueryStruct{}
+
 func ReadQuery(path string) string {
 	//use the os package to read the file
 	c, ioErr := os.ReadFile(path)
@@ -20,7 +28,7 @@ func ReadQuery(path string) string {
 	return sql
 }
 
-func RunQuery(socketPath string, queryString string) map[string]interface{}{
+func RunQuery(socketPath string, queryString string) QueryStruct {
 
 	if socketPath == "" {
 		log.Fatalf("Usage: %s SOCKET_PATH QUERY", socketPath)
@@ -35,6 +43,9 @@ func RunQuery(socketPath string, queryString string) map[string]interface{}{
 	if queryString == "" {
 		log.Fatalf("Bad Query: %s", queryString)
 	}
+
+	CurrentQueryStruct.CurrentQuery = strings.Trim(queryString, " ")
+
 	resp, err := client.Query(queryString)
 	if err != nil {
 		log.Fatalf("Error communicating with osqueryd: %v", err)
@@ -45,13 +56,16 @@ func RunQuery(socketPath string, queryString string) map[string]interface{}{
 
 	response, err := json.Marshal(resp.Response)
 	cli.PrintIfErr(err)
-	strJson := strings.Trim(string(response), "[]")
-	cli.Success("returned json : " + strJson)
+	CurrentQueryStruct.CurrentQueryResponseStr = string(response)
+	cli.Success("returned json : " + CurrentQueryStruct.CurrentQueryResponseStr)
+	CurrentQueryStruct.CurrentQueryResponseMap = QueryObject(CurrentQueryStruct.CurrentQueryResponseStr)
+	return *CurrentQueryStruct
+}
 
-	//declare map and unmarshal json into it
+func QueryObject(queryResponse string) map[string]interface{} {
+	// declare map and unmarshal json into it
 	var myStoredVariable map[string]interface{}
-	json.Unmarshal([]byte(strJson), &myStoredVariable)
-	cli.Success("myStoredVariable : " + myStoredVariable["name"].(string))
-
+	json.Unmarshal([]byte(queryResponse), &myStoredVariable)
 	return myStoredVariable
 }
+

@@ -33,3 +33,14 @@ func ReadFile(path string) string {
 	PrintIfErr(ioErr)
 	return readStr
 }
+
+
+func SetEnv(key string, val string) {
+	os.Setenv(key, val)
+}
+
+func WriteFile(path string, content string) {
+	//use the os package to write the file
+	ioErr := os.WriteFile(path, []byte(content), 0644)
+	PrintIfErr(ioErr)
+}

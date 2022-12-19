@@ -9,7 +9,6 @@ import (
 )
 
 var log = cli.ZeroLog()
-
 var dpc *DevicePostureCheck
 
 type DevicePostureCheck struct {
@@ -43,6 +42,10 @@ func Execute(dpc *DevicePostureCheck) {
 			Label: "Run New Query",
 			Key:   2,
 		},
+		{
+			Label: "Create Service",
+			Key:   3,
+		},
 	}
 	prompt := cli.Select("Welcome to GODPC - Please select an option: ", options)
 
@@ -63,7 +66,8 @@ func Execute(dpc *DevicePostureCheck) {
 		log.Info().Msg("Current Query Response String : " + dpc.osqst.CurrentQueryResponseStr)
 	case 2:
 		dpc.osqst = query()
-
+	case 3:
+		service(dpc.osqst.CurrentQueryResponseStr, dpc.tsenv)
 	}
 
 	Execute(dpc)
@@ -86,7 +90,7 @@ func query() osquery.QueryStruct {
 	//run the query
 	cli.Success("run query")
 	queryResponse := osquery.RunQuery("/var/osquery/osquery.em", queryString)
-	log.Info().Msg("queryResponse"+queryResponse.CurrentQueryResponseStr)
+	log.Info().Msg("queryResponse" + queryResponse.CurrentQueryResponseStr)
 	return queryResponse
 }
 

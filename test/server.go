@@ -15,7 +15,8 @@ var (
 )
 
 func main() {
-
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	
 	s := &tsnet.Server{
 		Hostname: *hostname,
 	}

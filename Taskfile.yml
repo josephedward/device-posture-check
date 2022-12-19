@@ -27,3 +27,7 @@ tasks:
     cmds:
       - echo "...Cleaning Cache..."
       - go clean -modcache | echo "Cleaned Go Cache"
+# target vs checker scripts
+# target is what runs on the device
+# checker can be the main script (CLI) we already have
+# but for now just run a single script that checks the device

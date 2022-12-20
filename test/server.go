@@ -6,8 +6,12 @@ import (
 	"html"
 	"log"
 	"net/http"
-	"strings"
+	
 	"tailscale.com/tsnet"
+	"github.com/rs/zerolog"
+	"godpc/cli"
+	//tailscale client
+	
 )
 
 var (
@@ -17,6 +21,8 @@ var (
 func main() {
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	
+	statusQuery := cli.ReadFile("./current/response.json")
+
 	s := &tsnet.Server{
 		Hostname: *hostname,
 	}
@@ -35,6 +41,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+
 	log.Fatal(http.Serve(ln, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		who, err := lc.WhoIs(r.Context(), r.RemoteAddr)
 		if err != nil {
@@ -42,19 +49,10 @@ func main() {
 			return
 		}
 
-		fmt.Fprintf(w, "<html><body><h1>Hello, world!</h1>\n")
-		fmt.Fprintf(w, "<p>You are <b>%s</b> from <b>%s</b> (%s)</p>",
-			html.EscapeString(who.UserProfile.LoginName),
-			html.EscapeString(firstLabel(who.Node.ComputedName)),
-			r.RemoteAddr)
+		fmt.Fprintf(w, "%s", string(statusQuery))
+
+		//print IP address of the service node
+		cli.Success("IP Address: ", html.EscapeString(r.Host))
+		cli.WriteFile(".serviceip", html.EscapeString(r.Host))
 	})))
 }
-
-func firstLabel(s string) string {
-	if hostname, _, ok := strings.Cut(s, "."); ok {
-		return hostname
-	}
-
-	return s
-}
-

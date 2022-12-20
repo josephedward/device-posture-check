@@ -3,30 +3,39 @@ version: "3"
 tasks:
   default:
     cmds:
+      - echo "*** Go-DVP - Node Information ***"
       - touch .tsip
       - tailscale ip -4 > .tsip
       - cat .tsip
       - tailscale status --json | jq -r '.Self.UserID' > .devid
       - cat .devid
-      - task osquery
-      - cd current && sudo caddy file-server --domain=$(cat ../.tsip) --browse
-  main:
+  cli:
     cmds:
-      - echo "...Bootstrapping Go-DVP..."
+      - echo "*** Go-DVP CLI ***"
       - ./scripts/init.sh
       - go run . {{.CLI_ARGS}}
   server:
     cmds:
-      - echo "***Starting Test/Server***"
+      - echo "*** Test/Server ***"
       - go run ./test/server.go {{.CLI_ARGS}}
   osquery:
     cmds:
-      - echo "***Starting Test/Osquery***"
+      - echo "*** Test/Osquery ***"
       - go run ./test/osquery.go {{.CLI_ARGS}}
   cache:
     cmds:
-      - echo "...Cleaning Cache..."
+      - echo "*** Cleaning Cache ***"
       - go clean -modcache | echo "Cleaned Go Cache"
+  target:
+    cmds:
+      - echo "*** Bootstrapping Target ***"
+      - ./scripts/init.sh
+      - go run ./test/target.go {{.CLI_ARGS}}
+  checker:
+    cmds:
+      - echo "*** Bootstrapping Checker ***"
+      - ./scripts/init.sh
+      - go run ./test/checker.go {{.CLI_ARGS}}
 # target vs checker scripts
 # target is what runs on the device
 # checker can be the main script (CLI) we already have

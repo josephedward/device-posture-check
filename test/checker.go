@@ -84,7 +84,7 @@ func main() {
 	}
 
 	// //it is a specific length, then the device is compliant
-	compliant = len(bodyString) > 2
+	compliant = len(bodyString) > 1
 	cli.Success("compliant : ", compliant)
 
 	//if compliant, authorize

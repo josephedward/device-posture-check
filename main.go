@@ -46,6 +46,10 @@ func Execute(dpc *DevicePostureCheck) {
 			Label: "Create Service",
 			Key:   3,
 		},
+		{
+			Label: "Visit Osquery Service Node",
+		},
+		
 	}
 	prompt := cli.Select("Welcome to GODPC - Please select an option: ", options)
 
@@ -67,7 +71,11 @@ func Execute(dpc *DevicePostureCheck) {
 	case 2:
 		dpc.osqst = query()
 	case 3:
-		service(dpc.osqst.CurrentQueryResponseStr, dpc.tsenv)
+		currentResponse := cli.ReadFile("./current/response.json")
+		service(currentResponse, dpc.tsenv)
+	case 4:
+		osquery.CheckPosture()
+	
 	}
 
 	Execute(dpc)
@@ -95,8 +103,17 @@ func query() osquery.QueryStruct {
 }
 
 func service(queryResponseStr string, tsenv cli.TsEnv) {
+
 	//create the service
 	cli.Success("Creating service")
 	tailscale.CreateService(queryResponseStr, tsenv)
 	// tailscale.CreateListener()
+}
+
+func visitServiceNode() {
+	serviceIp := cli.ReadFile(".serviceip")
+	cli.Success("serviceIp : ", serviceIp)
+	deviceIp := cli.ReadFile(".deviceip")
+	cli.Success("deviceIp : ", deviceIp)
+	osquery.CheckPosture(serviceIp, deviceIp)
 }

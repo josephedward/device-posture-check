@@ -3,3 +3,4 @@ misc
 *.png
 .devid
 .tsip
+.serviceip

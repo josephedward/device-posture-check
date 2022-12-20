@@ -203,6 +203,8 @@ github.com/tailscale/golang-x-crypto v0.0.0-20221102133106-bc99ab8c2d17 h1:cSm67
 github.com/tailscale/golang-x-crypto v0.0.0-20221102133106-bc99ab8c2d17/go.mod h1:95n9fbUCixVSI4QXLEvdKJjnYK2eUlkTx9+QwLPXFKU=
 github.com/tailscale/goupnp v1.0.1-0.20210804011211-c64d0f06ea05 h1:4chzWmimtJPxRs2O36yuGRW3f9SYV+bMTTvMBI0EKio=
 github.com/tailscale/goupnp v1.0.1-0.20210804011211-c64d0f06ea05/go.mod h1:PdCqy9JzfWMJf1H5UJW2ip33/d4YkoKN0r67yKH1mG8=
+github.com/tailscale/net v0.0.0-20210813185342-053852398eb0 h1:Hddg9nVn91GLYHoBVNm9CYGu3Dmfy38Em93H5SCvtjk=
+github.com/tailscale/net v0.0.0-20210813185342-053852398eb0/go.mod h1:uN05FIBvmTucj5z9qRoO7HtSsdHoeMW1hMTsyCyW288=
 github.com/tailscale/netlink v1.1.1-0.20211101221916-cabfb018fe85 h1:zrsUcqrG2uQSPhaUPjUQwozcRdDdSxxqhNgNZ3drZFk=
 github.com/tailscale/netlink v1.1.1-0.20211101221916-cabfb018fe85/go.mod h1:NzVQi3Mleb+qzq8VmcWpSkcSYxXIg0DkI6XDzpVkhJ0=
 github.com/tcnksm/go-httpstat v0.2.0 h1:rP7T5e5U2HfmOBmZzGgGZjBQ5/GluWUylujl0tJ04I0=

@@ -54,21 +54,21 @@ func Error(message ...interface{}) {
 }
 
 func Welcome() {
-	fmt.Println(Red + "                          :          ED.                             				" + Reset)
-	fmt.Println(Red + "                         t#,         E#Wi                          .,				" + Reset)
-	fmt.Println(Red + "                  .Gt   ;##W.        E###G.       t               ,Wt				" + Reset)
-	fmt.Println(Red + "                 j#W:  :#L:WE        E#fD#W;      ED.            i#D.				" + Reset)
-	fmt.Println(Red + "               ;K#f   .KG  ,#D       E#t t##L     E#K:          f#f  				" + Reset)
-	fmt.Println(Red + "             .G#D.    EE    ;#f      E#t  .E#K,   E##W;       .D#i   				" + Reset)
-	fmt.Println(Red + "            j#K;     f#.     t#i ### E#t    j##f  E#E##t     :KW,    				" + Reset)
-	fmt.Println(Red + "          ,K#f   ,GD;:#G     GK      E#t    :E#K: E#ti##f    t#f     				" + Reset)
-	fmt.Println(Red + "           j#Wi   E#t ;#L   LW.      E#t   t##L   E#t  ;##D.  ;#G    				" + Reset)
-	fmt.Println(Red + "            .G#D: E#t  t#f f#:       E#t .D#W;    E#E  .##K:   :KE.  				" + Reset)
-	fmt.Println(Red + "              ,K#fK#t   f#D#;        E#tiW#G.     E#L;;;;;;,    .DW: 				" + Reset)
-	fmt.Println(Red + "                j###t    G#t         E#K##i       E#t             L#,				" + Reset)
-	fmt.Println(Red + "                 .G#t     t          E##D.        E#t              jt				" + Reset)
-	fmt.Println(Red + "                   ;;                E#t    **    E#t     **        )  **          " + Reset)
-	fmt.Println(Red + "                                     L:                                            " + Reset)
+	fmt.Println(Blue + "                          :          ED.                             				" + Reset)
+	fmt.Println(Blue + "                         t#,         E#Wi                          .,				" + Reset)
+	fmt.Println(Blue + "                  .Gt   ;##W.        E###G.       t               ,Wt				" + Reset)
+	fmt.Println(Blue + "                 j#W:  :#L:WE        E#fD#W;      ED.            i#D.				" + Reset)
+	fmt.Println(Blue + "               ;K#f   .KG  ,#D       E#t t##L     E#K:          f#f  				" + Reset)
+	fmt.Println(Blue + "             .G#D.    EE    ;#f      E#t  .E#K,   E##W;       .D#i   				" + Reset)
+	fmt.Println(Blue + "            j#K;     f#.     t#i ### E#t    j##f  E#E##t     :KW,    				" + Reset)
+	fmt.Println(Blue + "          ,K#f   ,GD;:#G     GK      E#t    :E#K: E#ti##f    t#f     				" + Reset)
+	fmt.Println(Blue + "           j#Wi   E#t ;#L   LW.      E#t   t##L   E#t  ;##D.  ;#G    				" + Reset)
+	fmt.Println(Blue + "            .G#D: E#t  t#f f#:       E#t .D#W;    E#E  .##K:   :KE.  				" + Reset)
+	fmt.Println(Blue + "              ,K#fK#t   f#D#;        E#tiW#G.     E#L;;;;;;,    .DW: 				" + Reset)
+	fmt.Println(Blue + "                j###t    G#t         E#K##i       E#t             L#,				" + Reset)
+	fmt.Println(Blue + "                 .G#t     t          E##D.        E#t              jt				" + Reset)
+	fmt.Println(Blue + "                   ;;                E#t    **    E#t     **        )  **          " + Reset)
+	fmt.Println(Blue + "                                     L:                                            " + Reset)
 }
 
 func ZeroLog() zerolog.Logger {

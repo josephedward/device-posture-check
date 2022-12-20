@@ -18,7 +18,7 @@ var (
 	hostname = flag.String("hostname", "PostureService", "hostname for the tailnet")
 )
 
-func CreateService(statusQuery string, env cli.TsEnv) string {
+func CreateService(statusQuery string, env cli.TsEnv) {
 
 	s := &tsnet.Server{
 		Hostname: *hostname,
@@ -38,8 +38,6 @@ func CreateService(statusQuery string, env cli.TsEnv) string {
 		log.Fatal(err)
 	}
 
-	serviceIp := ""
-
 	http.Serve(ln, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		who, err := lc.WhoIs(r.Context(), r.RemoteAddr)
 		cli.Success(who)
@@ -58,8 +56,6 @@ func CreateService(statusQuery string, env cli.TsEnv) string {
 		cli.WriteFile(".serviceip", html.EscapeString(r.Host))
 
 	}))
-
-	return serviceIp
 
 }
 
@@ -109,3 +105,5 @@ func CreateService(statusQuery string, env cli.TsEnv) string {
 // 		fmt.Fprintf(w, "Hello, %s", html.EscapeString(who.UserProfile.LoginName))
 // 	}))
 // }
+
+// func VisitNode(){}

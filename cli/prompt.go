@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
 	"github.com/manifoldco/promptui"
 )
 
@@ -88,14 +87,10 @@ func PromptDownload() bool {
 }
 
 func PromptFileName() string {
-	filename := PromptGetInput(PromptContent{Label: "What would you like to name the file?"})
+	filename := PromptGetInput(PromptContent{Label: "File Name?"})
 	return filename
 }
 
-func PromptFilePath() string {
-	filepath := PromptGetInput(PromptContent{Label: "Where would you like to save the file to?"})
-	return filepath
-}
 
 func PromptConfig() bool {
 	willAppend := PromptGetInput(

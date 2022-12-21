@@ -5,10 +5,9 @@ import (
 	"godpc/cli"
 	"os"
 	"time"
-
-	// "strings"
 	"github.com/osquery/osquery-go"
 	"github.com/rs/zerolog"
+	// "strings"
 	// "fmt"
 	// "log"
 )
@@ -23,7 +22,7 @@ func main() {
 
 	//if there is no argument, use the default socket path
 	if len(os.Args) < 2 {
-		cli.Success("Using default socket path: %s", "/var/osquery/osquery.em")
+		cli.Error("Using default socket path: %s", "/var/osquery/osquery.em")
 		socketPath = "/var/osquery/osquery.em"
 	} else {
 		socketPath = os.Args[1]
@@ -31,13 +30,13 @@ func main() {
 	client, err := osquery.NewClient(socketPath, 10*time.Second)
 
 	if err != nil {
-		cli.Success("Error creating Thrift client: %v", err)
+		cli.Error("Error creating Thrift client: %v", err)
 	}
 	defer client.Close()
 
 	//if there is no argument, use the default query
 	if len(os.Args) < 3 {
-		cli.Success("Using default query in dir: %s", "./current/query.sql")
+		cli.Error("Using default query in dir: %s", "./current/query.sql")
 		query = cli.ReadFile("./current/query.sql")
 	} else {
 		query = os.Args[2]
@@ -45,16 +44,16 @@ func main() {
 
 	resp, err := client.Query(query)
 	if err != nil {
-		cli.Success("Error communicating with osqueryd: %v", err)
+		cli.Error("Error communicating with osqueryd: %v", err)
 	}
 	if resp.Status.Code != 0 {
-		cli.Success("osqueryd returned error: %s", resp.Status.Message)
+		cli.Error("osqueryd returned error: %s", resp.Status.Message)
 	}
 
 	cli.Success("Got results:\n%#v\n", resp.Response)
 
 	if len(os.Args) < 4 {
-		cli.Success("Writing query response to default location: %s", "./current/response.json")
+		cli.Error("Writing query response to default location: %s", "./current/response.json")
 		outPath = "./current/response.json"
 	} else {
 		outPath = os.Args[3]

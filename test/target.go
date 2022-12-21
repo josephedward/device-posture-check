@@ -11,6 +11,6 @@ func main() {
 	tsenv, err := cli.Env()
 	cli.PrintIfErr(err)
 	currentResponse := cli.ReadFile("./current/response.json")
-	tailscale.CreateService(currentResponse, tsenv)
+	tailscale.WebSocketService(currentResponse, tsenv)
 
 }

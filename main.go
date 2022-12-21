@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"godpc/cli"
-	"godpc/osquery"
 	"godpc/tailscale"
+	"godpc/osq"
 	"os"
 )
 
@@ -13,7 +13,7 @@ var dpc *DevicePostureCheck
 
 type DevicePostureCheck struct {
 	tsenv cli.TsEnv
-	osqst osquery.QueryStruct
+	osqst osq.QueryStruct
 }
 
 func main() {
@@ -39,19 +39,11 @@ func Execute(dpc *DevicePostureCheck) {
 			Key:   1,
 		},
 		{
-			Label: "Run New Query",
+			Label: "Connect to Target Service Node",
 			Key:   2,
 		},
-		{
-			Label: "Create Service",
-			Key:   3,
-		},
-		{
-			Label: "Visit Osquery Service Node",
-		},
-		
 	}
-	prompt := cli.Select("Welcome to GODPC - Please select an option: ", options)
+	prompt := cli.Select("Please select an option: ", options)
 
 	i, _, err := prompt.Run()
 
@@ -66,16 +58,13 @@ func Execute(dpc *DevicePostureCheck) {
 	case 0:
 		os.Exit(0)
 	case 1:
-		log.Info().Msg("Current Query : " + dpc.osqst.CurrentQuery)
-		log.Info().Msg("Current Query Response String : " + dpc.osqst.CurrentQueryResponseStr)
+		cli.Success("Current Query Information : ")
+		cli.Success("Current Query : " + osq.GetQuery())
+		cli.Success("Current Query Response String : " + osq.GetResponse())
 	case 2:
-		dpc.osqst = query()
-	case 3:
-		currentResponse := cli.ReadFile("./current/response.json")
-		service(currentResponse, dpc.tsenv)
-	case 4:
-		osquery.CheckPosture()
-	
+		cli.Success("Connecting to Target Service Node : ")
+		tailscale.ConnectService()
+
 	}
 
 	Execute(dpc)
@@ -89,15 +78,15 @@ func bootstrap() cli.TsEnv {
 	return tsenv
 }
 
-func query() osquery.QueryStruct {
+func query() osq.QueryStruct {
 	// read the query
 	queryString := cli.PromptQuery()
 	// cli.Success("query : ")
-	// queryString := osquery.ReadQuery("query.sql")
+	// queryString := osq.ReadQuery("query.sql")
 	log.Info().Msg("query : " + queryString)
 	//run the query
 	cli.Success("run query")
-	queryResponse := osquery.RunQuery("/var/osquery/osquery.em", queryString)
+	queryResponse := osq.RunQuery("/var/osquery/osquery.em", queryString)
 	log.Info().Msg("queryResponse" + queryResponse.CurrentQueryResponseStr)
 	return queryResponse
 }
@@ -105,15 +94,15 @@ func query() osquery.QueryStruct {
 func service(queryResponseStr string, tsenv cli.TsEnv) {
 
 	//create the service
-	cli.Success("Creating service")
-	tailscale.CreateService(queryResponseStr, tsenv)
+	// cli.Success("Creating service")
+	// tailscale.CreateService(queryResponseStr, tsenv)
 	// tailscale.CreateListener()
 }
 
-func visitServiceNode() {
-	serviceIp := cli.ReadFile(".serviceip")
-	cli.Success("serviceIp : ", serviceIp)
-	deviceIp := cli.ReadFile(".deviceip")
-	cli.Success("deviceIp : ", deviceIp)
-	osquery.CheckPosture(serviceIp, deviceIp)
-}
+// func visitServiceNode() {
+// 	serviceIp := cli.ReadFile(".serviceip")
+// 	cli.Success("serviceIp : ", serviceIp)
+// 	deviceIp := cli.ReadFile(".deviceip")
+// 	cli.Success("deviceIp : ", deviceIp)
+// 	osq.CheckPosture(serviceIp, deviceIp)
+// }

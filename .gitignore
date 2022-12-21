@@ -4,3 +4,5 @@ misc
 .devid
 .tsip
 .serviceip
+*.log
+tmp/main

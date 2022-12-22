@@ -141,3 +141,18 @@ func PromptQuery() string {
 	fmt.Printf("Query Entered : %q\n", result)
 	return result
 }
+
+
+func PromptString(label string) (string, error){
+	validate := func(input string) error {
+		if len(input) <= 0 {
+			return errors.New("Please enter a valid string!")
+		}
+		return nil
+	}
+	prompt := promptui.Prompt{ Label: label, Validate: validate}
+	result, err := prompt.Run()
+	PrintIfErr(err)
+	Success("Input: %s\n", result)
+	return result, err
+}

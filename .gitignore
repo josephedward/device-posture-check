@@ -6,3 +6,4 @@ misc
 .serviceip
 *.log
 tmp/main
+.DS_Store

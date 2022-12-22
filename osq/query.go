@@ -2,22 +2,10 @@ package osq
 
 import (
 	"encoding/json"
+	"github.com/osquery/osquery-go"
 	"godpc/cli"
-	"log"
 	"strings"
 	"time"
-	"github.com/osquery/osquery-go"
-	// "os"
-	// "tailscale.com/client/tailscale"
-	// "github.com/rs/zerolog"
-	// "io"
-	// "fmt"
-	// "context"
-	// "crypto/tls"
-	// "fmt"
-	// "net/http"
-
-
 )
 
 type QueryStruct struct {
@@ -28,31 +16,27 @@ type QueryStruct struct {
 
 var CurrentQueryStruct = &QueryStruct{}
 
-
 func RunQuery(socketPath string, queryString string) QueryStruct {
-
 	if socketPath == "" {
-		log.Fatalf("Usage: %s SOCKET_PATH QUERY", socketPath)
+		cli.Error("bad SOCKET_PATH QUERY : ", socketPath)
 	}
-
 	client, err := osquery.NewClient(socketPath, 10*time.Second)
 	if err != nil {
-		log.Fatalf("Error creating Thrift client: %v", err)
+		cli.Error("Error creating Thrift client : ", err)
 	}
 	defer client.Close()
-
 	if queryString == "" {
-		log.Fatalf("Bad Query: %s", queryString)
+		cli.Error("Bad Query : ", queryString)
 	}
 
 	CurrentQueryStruct.CurrentQuery = strings.Trim(queryString, " ")
-
-	resp, err := client.Query(queryString)
+	cli.Success("Running query : " + CurrentQueryStruct.CurrentQuery)
+	resp, err := client.Query(CurrentQueryStruct.CurrentQuery)
 	if err != nil {
-		log.Fatalf("Error communicating with osqueryd: %v", err)
+		cli.Error("Error communicating with osqueryd : ", err)
 	}
 	if resp.Status.Code != 0 {
-		log.Fatalf("osqueryd returned error: %s", resp.Status.Message)
+		cli.Error("osqueryd returned error : ", resp.Status.Message)
 	}
 
 	response, err := json.Marshal(resp.Response)
@@ -64,7 +48,6 @@ func RunQuery(socketPath string, queryString string) QueryStruct {
 }
 
 func QueryObject(queryResponse string) map[string]interface{} {
-	// declare map and unmarshal json into it
 	var myStoredVariable map[string]interface{}
 	json.Unmarshal([]byte(queryResponse), &myStoredVariable)
 	return myStoredVariable
@@ -77,12 +60,11 @@ func GetCurrentQueryStruct() QueryStruct {
 	return *CurrentQueryStruct
 }
 
-
-func GetQuery() string{
+func GetQuery() string {
 	return cli.ReadFile("./current/query.sql")
 }
 
-func GetResponse()string{
+func GetResponse() string {
 	return cli.ReadFile("./current/response.json")
 }
 

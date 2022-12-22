@@ -7,10 +7,8 @@ import (
 )
 
 func main() {
-	// origin := "http://100.99.127.71"
-	// url := "ws://100.99.14.179:80/"
 	origin := "http://100.99.211.98"
-	url := "ws://100.80.65.250:80/"
+	url := "ws://100.124.221.206:80/"
 	ws, err := websocket.Dial(url, "", origin)
 	if err != nil {
 		log.Fatal(err)

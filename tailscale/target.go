@@ -23,9 +23,9 @@ var (
 // Echo the data received on the WebSocket.
 func Echo(ws *websocket.Conn) {
 	//print out something very recognizable to the console
-	cli.Success("echo : ", ws)
-
+	cli.Success("connection : ", ws)
 	res := osq.GetResponse()
+	cli.Success(res)
 	//return something very recognizable to the client
 	io.WriteCloser(ws).Write([]byte(res))
 }
@@ -35,27 +35,16 @@ func WebSocketService(statusQuery string, env cli.TsEnv) {
 	tsenv, err := cli.Env()
 	cli.Success("tsenv : ", tsenv)
 	cli.PrintIfErr(err)
-
 	s := &tsnet.Server{
 		Hostname: *tailnetServiceName,
 	}
-
 	defer s.Close()
-
 	ln, err := s.Listen("tcp", ":80")
-	if err != nil {
-		cli.Error(err)
-	}
-
+	cli.PrintIfErr(err)
 	defer ln.Close()
-
 	lc, err := s.LocalClient()
-	if err != nil {
-		cli.Error(err)
-	}
+	cli.PrintIfErr(err)
 	cli.Success("lc : ", lc)
-
 	osq.SetResponse(statusQuery)
-
 	http.Serve(ln, websocket.Handler(Echo))
 }

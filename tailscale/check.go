@@ -2,12 +2,11 @@ package tailscale
 
 import (
 	"fmt"
+	"github.com/tailscale/net/websocket"
 	"godpc/cli"
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/tailscale/net/websocket"
 	// "fmt"
 	// "flag"
 	// "io"
@@ -55,23 +54,39 @@ func AuthorizeDevice(deviceID, apiKey string) error {
 	return err
 }
 
-// WIP - not working
-// at a minimum, prompt for the origin (IP address of this device) and the URL (the IP address of the PostureService on the tailnet)
-// origin, url string
-func ConnectService() string {
-	origin := "http://100.99.211.98"
-	url := "ws://100.80.65.250:8888/"
+func ConnectWebSocket(origin, url string) *websocket.Conn {
+	origin = "http://" + origin
+	url = "ws://" + url + ":80/"
+	cli.Success("origin : ", origin)
+	cli.Success("url : ", url)
+
 	ws, err := websocket.Dial(url, "", origin)
 	cli.PrintIfErr(err)
-	// if _, err := ws.Write([]byte("hello, world!\n")); err != nil {
-	// 	cli.Error(err)
-	// }
-	var msg = make([]byte, 512)
-	var n int
-	if n, err = ws.Read(msg); err != nil {
-		cli.PrintIfErr(err)
-	}
-	fmt.Printf("Received: %s.\n", msg[:n])
+	cli.Success("Connected to WebSocket : ", ws)
 
-	return string(msg[:n])
+	return ws
 }
+
+func DisconnectWebSocket(ws *websocket.Conn) {
+	cli.Success("Disconnecting from WebSocket : ", ws)
+	ws.Close()
+}
+
+func SendMessage(ws *websocket.Conn, msg string) {
+	if _, err := ws.Write([]byte(msg)); err != nil {
+		cli.Error(err)
+	}
+}
+
+// at a minimum, prompt for the origin (IP address of this device) and the URL (the IP address of the PostureService on the tailnet)
+// origin, url string
+// if _, err := ws.Write([]byte("hello, world!\n")); err != nil {
+// 	cli.Error(err)
+// }
+// var msg = make([]byte, 512)
+// var n int
+// if n, err = ws.Read(msg); err != nil {
+// 	cli.PrintIfErr(err)
+// }
+// fmt.Printf("Received: %s.\n", msg[:n])
+// return string(msg[:n])

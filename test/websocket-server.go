@@ -29,7 +29,8 @@ func main() {
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	tsenv, err := cli.Env()
 	cli.Success("tsenv : ", tsenv)
-
+	cli.PrintIfErr(err)
+	
 	s := &tsnet.Server{
 		Hostname: *hostname,
 	}

@@ -2,25 +2,27 @@ package main
 
 import (
 	"fmt"
+	"github.com/tailscale/net/websocket"
 	"godpc/cli"
-	"godpc/tailscale"
 	"godpc/osq"
+	"godpc/tailscale"
 	"os"
+	"os/exec"
+	// "time"
 )
 
 var log = cli.ZeroLog()
 var dpc *DevicePostureCheck
 
 type DevicePostureCheck struct {
-	tsenv cli.TsEnv
-	osqst osq.QueryStruct
+	tsenv  cli.TsEnv
+	osqst  osq.QueryStruct
+	wsconn *websocket.Conn
 }
 
 func main() {
 	dpc = &DevicePostureCheck{}
-
 	dpc.tsenv = bootstrap()
-
 	exit := false
 	for !exit {
 		Execute(dpc)
@@ -28,19 +30,34 @@ func main() {
 }
 
 func Execute(dpc *DevicePostureCheck) {
-
 	options := []cli.PromptOptions{
 		{
 			Label: "Exit CLI",
 			Key:   0,
 		},
 		{
-			Label: "Display Current Query Information",
+			Label: "Display Last Query Information",
 			Key:   1,
 		},
 		{
 			Label: "Connect to Target Service Node",
 			Key:   2,
+		},
+		{
+			Label: "Disconnect from Target Service Node",
+			Key:   3,
+		},
+		{
+			Label: "Run a New Query",
+			Key:   4,
+		},
+		{
+			Label: "Scripted Websocket Connection",
+			Key:   5,
+		},
+		{
+			Label: "Scripted Osquery Execution",
+			Key:   6,
 		},
 	}
 	prompt := cli.Select("Please select an option: ", options)
@@ -51,22 +68,26 @@ func Execute(dpc *DevicePostureCheck) {
 		fmt.Printf("Prompt failed %v\n", err)
 		return
 	}
-
 	fmt.Printf("Option %d: %s\n", i+1, options[i].Label)
-
 	switch options[i].Key {
 	case 0:
 		os.Exit(0)
 	case 1:
-		cli.Success("Current Query Information : ")
-		cli.Success("Current Query : " + osq.GetQuery())
-		cli.Success("Current Query Response String : " + osq.GetResponse())
+		dpc.displayQuery()
 	case 2:
-		cli.Success("Connecting to Target Service Node : ")
-		tailscale.ConnectService()
-
+		dpc.wsconn = dpc.connectTarget()
+	case 3:
+		dpc.disconnectTarget()
+	case 4:
+		queryStr, err := cli.PromptString("Enter a query to run: ")
+		cli.PrintIfErr(err)
+		dpc.osqst = *dpc.newQuery(queryStr)
+		
+	case 5:
+		dpc.scriptWebsocketConnection()
+	case 6:
+		dpc.osqst = *dpc.newQuery("select * from users;")
 	}
-
 	Execute(dpc)
 }
 
@@ -78,31 +99,36 @@ func bootstrap() cli.TsEnv {
 	return tsenv
 }
 
-func query() osq.QueryStruct {
-	// read the query
-	queryString := cli.PromptQuery()
-	// cli.Success("query : ")
-	// queryString := osq.ReadQuery("query.sql")
-	log.Info().Msg("query : " + queryString)
-	//run the query
-	cli.Success("run query")
-	queryResponse := osq.RunQuery("/var/osquery/osquery.em", queryString)
-	log.Info().Msg("queryResponse" + queryResponse.CurrentQueryResponseStr)
-	return queryResponse
+func (dpc *DevicePostureCheck) displayQuery() {
+	query := osq.GetCurrentQueryStruct()
+	cli.Success("current query : ", query.CurrentQuery)
+	cli.Success("current query response : ", query.CurrentQueryResponseStr)
 }
 
-func service(queryResponseStr string, tsenv cli.TsEnv) {
-
-	//create the service
-	// cli.Success("Creating service")
-	// tailscale.CreateService(queryResponseStr, tsenv)
-	// tailscale.CreateListener()
+func (dpc *DevicePostureCheck) newQuery(queryString string) *osq.QueryStruct {
+	query := osq.RunQuery("/var/osquery/osquery.em", queryString)
+	cli.Success("query : ", query)
+	return &query
 }
 
-// func visitServiceNode() {
-// 	serviceIp := cli.ReadFile(".serviceip")
-// 	cli.Success("serviceIp : ", serviceIp)
-// 	deviceIp := cli.ReadFile(".deviceip")
-// 	cli.Success("deviceIp : ", deviceIp)
-// 	osq.CheckPosture(serviceIp, deviceIp)
-// }
+func (dpc *DevicePostureCheck) connectTarget() *websocket.Conn {
+	cli.Success("Connecting to Target Service Node...")
+	originIp, err := cli.PromptString("Enter the IP address of origin ")
+	cli.PrintIfErr(err)
+	serviceIp, err := cli.PromptString("Enter the IP address of service ")
+	cli.PrintIfErr(err)
+	socketConnect := tailscale.ConnectWebSocket(originIp, serviceIp)
+	return socketConnect
+}
+
+func (dpc *DevicePostureCheck) disconnectTarget() {
+	cli.Success("Disconnecting from Target Service Node...")
+	tailscale.DisconnectWebSocket(dpc.wsconn)
+	cli.Success("Disconnected! ")
+}
+
+func (dpc *DevicePostureCheck) scriptWebsocketConnection() {
+	//execute the /test/osquery.go script
+	exec.Command("go run /test/osquery.go")
+
+}
